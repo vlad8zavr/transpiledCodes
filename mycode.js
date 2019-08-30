@@ -1,6 +1,5 @@
 "use strict";
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+console.log('formulaire v1');
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -155,8 +154,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     var autocomplete = require('./inputautocomplete');
 
-    var slider = require('./slider/slider');
-
     var _data$popUpContent$su = data.popUpContent.subscription,
         options = _data$popUpContent$su.options,
         remark = _data$popUpContent$su.remark,
@@ -174,49 +171,21 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
 
     runPopup();
-    render.addPreloader(); // render.renderBannerBottom();
+    render.addPreloader();
+    render.renderBannerBottom(); // user journey
 
-    getUserJourney();
+    data.models.options.forEach(function (item) {
+      var carModel = item.toLowerCase().split(' ')[0];
+
+      if (window.location.href.match(carModel)) {
+        // console.log(`item = ${item}`);
+        // console.log(`item.toLowerCase().split(' ')[0] = ${carModel}`);
+        utils._qs('#kam-model-picker').value = carModel;
+      }
+    });
     autocomplete.autocompleteAddress();
     validation.checkValidation();
     validation.runClickValidation();
-
-    function getUserJourney() {
-      var previousUrl = document.referrer;
-      console.log('[getUserJourney]');
-      console.log("previousUrl = ".concat(previousUrl));
-      data.models.options.forEach(function (item) {
-        var carModel1 = item.split(' ')[0];
-        var carModel2 = item.split(' ')[1];
-
-        if (isUserJourneyPresent(carModel1, carModel2, previousUrl)) {
-          utils._qs('#kam-model-picker').value = item;
-        }
-      });
-    }
-
-    function isUserJourneyPresent(carModel1, carModel2, previousUrl) {
-      return carModel1.toLowerCase() != 'nouvelle' && previousUrl.match(carModel1.toLowerCase()) || carModel1.toLowerCase() == 'nouvelle' && carModel2 && previousUrl.match(carModel2.toLowerCase());
-    } // ---------- slider test---------------
-
-
-    var slideImages = ['https://m.economictimes.com/thumb/msid-68721421,width-640,height-480,resizemode-7/nature.jpg', 'https://cdn.pixabay.com/photo/2017/06/08/13/21/nature-2383627_640.jpg', 'https://www.studiointernational.com/images/articles/c/066-chihuly-dale-2019/Neodymium-Reeds-and-Turquoise-Marlins,-blown-glass,-(date-not-specified).jpg'];
-    var wrap = document.createElement('div');
-    wrap.classList.add('wrapperSlider');
-    document.querySelector('#container').appendChild(wrap);
-    var wrapper = '.wrapperSlider';
-    var width = 640;
-    new slider(slideImages, wrapper, width, {
-      arrowButtons: true,
-      controlDots: true,
-      infiniteScrolling: true,
-      auto: true,
-      autoplaySpeed: 5000,
-      slideIndex: 1,
-      widthOfTheSlide: width,
-      amountSlidesToMove: 1
-    }); // -------------------------------------
-
     /* // logic of reopening popup with banner
     
     let numberOfBannerAppears = 0;
@@ -271,9 +240,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     "./inputautocomplete": 3,
     "./popup/script": 4,
     "./render": 5,
-    "./slider/slider": 7,
-    "./utils": 8,
-    "./validation": 9
+    "./utils": 7,
+    "./validation": 8
   }],
   3: [function (require, module, exports) {
     var utils = require('./utils');
@@ -306,6 +274,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4 && this.responseText) {
           var response = JSON.parse(this.responseText);
+          console.log('resentWithWiderRange response ====>', response);
 
           if (response.data) {
             var dealers = response.data;
@@ -355,7 +324,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var dealersContainer = document.createElement('ul');
       dealersContainer.classList.add('kam-dealers-container');
       addressInput.parentNode.appendChild(dealersContainer);
-      dealersContainer.insertAdjacentHTML('beforeend', "<li class=\"kam-dealers-container__option\" data-dealerId=\"".concat(window.sessionStorage.getItem('kam-chosenDealerId').toString(), "\">").concat(window.sessionStorage.getItem('kam-chosenDealer').toString(), "</li>")); // the option here is only one
+      dealersContainer.insertAdjacentHTML('beforeend', "<li class=\"kam-dealers-container__option kam\" data-dealerId=\"".concat(window.sessionStorage.getItem('kam-chosenDealerId').toString(), "\">").concat(window.sessionStorage.getItem('kam-chosenDealer').toString(), "</li>")); // the option here is only one
 
       var option = utils._qs('.kam-dealers-container__option');
 
@@ -443,7 +412,18 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         dealersContainer.classList.add('kam-dealers-container');
         addressInput.parentNode.appendChild(dealersContainer);
         arrayResults.reduce(function (acc, option) {
-          var dealerInfo = "<li class=\"kam-dealers-container__option\" data-dealerId=\"".concat(option.dealerId, "\">").concat(option.address, "</li>");
+          console.log('option', option);
+          console.log('option.address', option.address);
+          var k_formAdresse = option.address;
+          k_formAdresse = k_formAdresse.replace(/:/g, ' : ');
+          var k_dealer = k_formAdresse.split(',')[0];
+          var k_adresse = k_formAdresse.split(',')[1];
+          var k_city = k_formAdresse.split(',')[2].split(',')[0];
+          var k_codePostal = k_formAdresse.split(',')[3];
+          var k_adresseFinal = k_dealer +' ' + k_adresse + ' -' + k_codePostal + ' ' + k_city;
+          addressInput.value = k_adresseFinal;
+          console.log('k_adresseFinal', k_adresseFinal);
+          var dealerInfo = "<li class=\"kam-dealers-container__option\" data-dealerId=\"".concat(option.dealerId, "\">").concat(k_adresseFinal, "</li>");
 
           if (acc.length < 6) {
             dealersContainer.insertAdjacentHTML('beforeend', dealerInfo);
@@ -456,11 +436,12 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         options.forEach(function (dealer) {
           dealer.addEventListener(Kameleoon.Internals.runtime.mouseDownEvent, function () {
             if (!Kameleoon.Internals.runtime.touchMoveEvent) {
-              addressInput.value = dealer.textContent;
-              window.sessionStorage.setItem('kam-chosenDealer', dealer.textContent);
-              window.sessionStorage.setItem('kam-chosenDealerId', dealer.getAttribute('data-dealerId'));
-              utils.removeElement(dealersContainer);
-              hideErrorMessage();
+                addressInput.value = dealer.textContent;
+              	addressInput.value = dealer.textContent;
+                window.sessionStorage.setItem('kam-chosenDealer', dealer.textContent);
+                window.sessionStorage.setItem('kam-chosenDealerId', dealer.getAttribute('data-dealerId'));
+                utils.removeElement(dealersContainer);
+                hideErrorMessage();
             }
           });
         });
@@ -496,6 +477,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         xhr.addEventListener("readystatechange", function () {
           if (this.readyState === 4 && this.responseText) {
             var response = JSON.parse(this.responseText);
+            console.log('autocompleteAddress response ====>', response);
 
             if (response.data) {
               var dealers = response.data;
@@ -559,7 +541,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
     };
   }, {
-    "./utils": 8
+    "./utils": 7
   }],
   4: [function (require, module, exports) {
     var PopUp =
@@ -705,6 +687,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         });
       },
       renderAfterSendPage: function renderAfterSendPage(data) {
+        console.log('data ====>', data);
         var verstka =
         /*html*/
         "\n        <div class=\"kam-form-result kam-form-result_visibility_hidden\">\n             <div class=\"kam-form-result__content\">\n                <div class=\"kam-form-result__heading\">".concat(data.successPage.title, "</div>\n                <div class=\"kam-form-result__first-paragraph\">").concat(data.successPage.firstParagraph, "</div>\n                <div class=\"kam-form-result__second-paragraph\">").concat(data.successPage.secondParagraph, "</div>\n                <div class=\"kam-form-result__third-paragraph\">").concat(data.successPage.thirdParagraph, "</div>\n             </div>\n        </div>");
@@ -824,7 +807,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
     };
   }, {
-    "./utils": 8
+    "./utils": 7
   }],
   6: [function (require, module, exports) {
     var utils = require('./utils');
@@ -1049,164 +1032,9 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   }, {
     "./data": 1,
     "./render": 5,
-    "./utils": 8
+    "./utils": 7
   }],
   7: [function (require, module, exports) {
-    var Slider =
-    /*#__PURE__*/
-    function () {
-      function Slider(arrSrc, wrapperBlock, widthSlide, sliderOptions) {
-        _classCallCheck(this, Slider);
-
-        this.countSlide = arrSrc.length;
-        this.wrapperBlock = wrapperBlock;
-        this.defaultParams = {
-          arrowButtons: true,
-          controlDots: false,
-          infiniteScrolling: true,
-          auto: false,
-          autoplaySpeed: 5000,
-          slideIndex: 1,
-          widthOfTheSlide: widthSlide,
-          amountSlidesToMove: 1
-        };
-        this.sliderOptions = _objectSpread({}, this.defaultParams, sliderOptions);
-
-        this._initSlider(wrapperBlock, arrSrc);
-      }
-
-      _createClass(Slider, [{
-        key: "_initSlider",
-        value: function _initSlider(wrapperBlock, arrSrc) {
-          var sliderBlock = "\n            <div class=\"wrapperOverflow\">\n                ".concat(this._addArrow('rightArrow'), "\n                <ul class=\"k_slider\">\n                ").concat(this._addSlide(arrSrc), "\n                </ul>\n                ").concat(this._addArrow('leftArrow'), "\n            </div>\n        ");
-          var wrapper = document.querySelector(wrapperBlock);
-          wrapper.insertAdjacentHTML('afterbegin', sliderBlock);
-          var parentElem = document.querySelector('.k_slider');
-
-          if (this.sliderOptions.arrowButtons) {
-            var rightArrow = document.querySelector('.wrapperOverflow .rightArrow');
-            var leftArrow = document.querySelector('.wrapperOverflow .leftArrow');
-
-            this._nextSlide(rightArrow, parentElem);
-
-            this._previousSlide(leftArrow, parentElem);
-          }
-
-          if (this.sliderOptions.auto) {
-            this._autoSwitchSlide(parentElem);
-          }
-
-          this._changePositionSlide(parentElem);
-
-          wrapper.style.width = "".concat(this.defaultParams.widthOfTheSlide * this.defaultParams.amountSlidesToMove, "px");
-        }
-      }, {
-        key: "_addSlide",
-        value: function _addSlide(arrElem) {
-          var _this4 = this;
-
-          var allSlide = arrElem.map(function (item, i) {
-            return "<li class=\"k_Slide slide_".concat(i, "\" style=\"width:").concat(_this4.sliderOptions.widthOfTheSlide, "px;\">\n                                <img src=\"").concat(item, "\"/>\n            </li>");
-          });
-
-          if (this.sliderOptions.auto || this.sliderOptions.infiniteScrolling) {
-            allSlide.push(allSlide[0]);
-            allSlide.unshift(allSlide[allSlide.length - 2]);
-            this.countSlide = this.countSlide + 2;
-          }
-
-          return allSlide.join('');
-        }
-      }, {
-        key: "_addArrow",
-        value: function _addArrow(className) {
-          return this.sliderOptions.arrowButtons ? "<div class=\"".concat(className, " arrow\"></div>") : '';
-        }
-      }, {
-        key: "_nextSlide",
-        value: function _nextSlide(nextBtn, parentElem) {
-          var _this5 = this;
-
-          this._changePositionSlide(parentElem);
-
-          var weitTransitionEnd = 0;
-          nextBtn.addEventListener('click', function () {
-            if (_this5.countSlide - _this5.sliderOptions.amountSlidesToMove > _this5.sliderOptions.slideIndex && weitTransitionEnd === 0) {
-              weitTransitionEnd++;
-              _this5.sliderOptions.slideIndex = _this5.sliderOptions.slideIndex + _this5.sliderOptions.amountSlidesToMove;
-            }
-
-            _this5._changePositionSlide(parentElem);
-          });
-          parentElem.addEventListener('transitionend', function () {
-            weitTransitionEnd = 0;
-          });
-        }
-      }, {
-        key: "_previousSlide",
-        value: function _previousSlide(previousBtn, parentElem) {
-          var _this6 = this;
-
-          var weitTransitionEnd = 0;
-
-          this._changePositionSlide(parentElem);
-
-          previousBtn.addEventListener('click', function () {
-            if (_this6.sliderOptions.slideIndex >= 1 && weitTransitionEnd === 0) {
-              weitTransitionEnd++;
-              _this6.sliderOptions.slideIndex = _this6.sliderOptions.slideIndex - _this6.sliderOptions.amountSlidesToMove;
-            }
-
-            _this6._changePositionSlide(parentElem);
-          });
-          parentElem.addEventListener('transitionend', function () {
-            weitTransitionEnd = 0;
-          });
-        }
-      }, {
-        key: "_changePositionSlide",
-        value: function _changePositionSlide(parentElem) {
-          var _this7 = this;
-
-          var slideIndex = this.sliderOptions.slideIndex;
-          var checkLastElem = slideIndex === this.countSlide - 1;
-          var checkFirstElem = slideIndex === 0;
-          parentElem.style.transition = 'left 1s';
-          parentElem.style.left = "-".concat(this.sliderOptions.slideIndex * this.sliderOptions.widthOfTheSlide, "px");
-          parentElem.addEventListener('transitionend', function () {
-            if (_this7.sliderOptions.infiniteScrolling && (checkLastElem || checkFirstElem)) {
-              if (checkLastElem) {
-                _this7.sliderOptions.slideIndex = 1;
-              } else if (checkFirstElem) {
-                _this7.sliderOptions.slideIndex = _this7.countSlide - 2;
-              }
-
-              parentElem.style.transition = 'none';
-              parentElem.style.left = "-".concat(_this7.sliderOptions.slideIndex * _this7.sliderOptions.widthOfTheSlide, "px");
-            }
-          }, {
-            once: true
-          });
-        }
-      }, {
-        key: "_autoSwitchSlide",
-        value: function _autoSwitchSlide(parentElem) {
-          var _this8 = this;
-
-          setInterval(function () {
-            _this8.sliderOptions.slideIndex++;
-
-            _this8._changePositionSlide(parentElem);
-          }, this.sliderOptions.autoplaySpeed);
-        }
-      }]);
-
-      return Slider;
-    }();
-
-    module.exports = Slider;
-  }, {}],
-  8: [function (require, module, exports) {
     module.exports = {
       // shortcut for document.querySelector()
       _qs: function _qs(selector) {
@@ -1225,7 +1053,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
     };
   }, {}],
-  9: [function (require, module, exports) {
+  8: [function (require, module, exports) {
     var utils = require('./utils');
 
     var sendData = require('./sendData');
@@ -1432,6 +1260,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     };
   }, {
     "./sendData": 6,
-    "./utils": 8
+    "./utils": 7
   }]
 }, {}, [2]);
