@@ -1,5 +1,4 @@
 "use strict";
-console.log('formulaire v1');
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -171,21 +170,30 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
 
     runPopup();
-    render.addPreloader();
-    render.renderBannerBottom(); // user journey
+    render.addPreloader(); // render.renderBannerBottom();
 
-    data.models.options.forEach(function (item) {
-      var carModel = item.toLowerCase().split(' ')[0];
-
-      if (window.location.href.match(carModel)) {
-        // console.log(`item = ${item}`);
-        // console.log(`item.toLowerCase().split(' ')[0] = ${carModel}`);
-        utils._qs('#kam-model-picker').value = carModel;
-      }
-    });
+    getUserJourney();
     autocomplete.autocompleteAddress();
     validation.checkValidation();
     validation.runClickValidation();
+
+    function getUserJourney() {
+      var previousUrl = document.referrer;
+      console.log('[getUserJourney]');
+      console.log("previousUrl = ".concat(previousUrl));
+      data.models.options.forEach(function (item) {
+        var carModel1 = item.split(' ')[0];
+        var carModel2 = item.split(' ')[1];
+
+        if (isUserJourneyPresent(carModel1, carModel2, previousUrl)) {
+          utils._qs('#kam-model-picker').value = item;
+        }
+      });
+    }
+
+    function isUserJourneyPresent(carModel1, carModel2, previousUrl) {
+      return carModel1.toLowerCase() != 'nouvelle' && previousUrl.match(carModel1.toLowerCase()) || carModel1.toLowerCase() == 'nouvelle' && carModel2 && previousUrl.match(carModel2.toLowerCase());
+    }
     /* // logic of reopening popup with banner
     
     let numberOfBannerAppears = 0;
@@ -235,6 +243,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     closePopupAndShowBanner();
     
     */
+
   }, {
     "./data": 1,
     "./inputautocomplete": 3,
@@ -274,7 +283,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4 && this.responseText) {
           var response = JSON.parse(this.responseText);
-          console.log('resentWithWiderRange response ====>', response);
 
           if (response.data) {
             var dealers = response.data;
@@ -324,7 +332,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var dealersContainer = document.createElement('ul');
       dealersContainer.classList.add('kam-dealers-container');
       addressInput.parentNode.appendChild(dealersContainer);
-      dealersContainer.insertAdjacentHTML('beforeend', "<li class=\"kam-dealers-container__option kam\" data-dealerId=\"".concat(window.sessionStorage.getItem('kam-chosenDealerId').toString(), "\">").concat(window.sessionStorage.getItem('kam-chosenDealer').toString(), "</li>")); // the option here is only one
+      dealersContainer.insertAdjacentHTML('beforeend', "<li class=\"kam-dealers-container__option\" data-dealerId=\"".concat(window.sessionStorage.getItem('kam-chosenDealerId').toString(), "\">").concat(window.sessionStorage.getItem('kam-chosenDealer').toString(), "</li>")); // the option here is only one
 
       var option = utils._qs('.kam-dealers-container__option');
 
@@ -412,18 +420,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         dealersContainer.classList.add('kam-dealers-container');
         addressInput.parentNode.appendChild(dealersContainer);
         arrayResults.reduce(function (acc, option) {
-          console.log('option', option);
-          console.log('option.address', option.address);
-          var k_formAdresse = option.address;
-          k_formAdresse = k_formAdresse.replace(/:/g, ' : ');
-          var k_dealer = k_formAdresse.split(',')[0];
-          var k_adresse = k_formAdresse.split(',')[1];
-          var k_city = k_formAdresse.split(',')[2].split(',')[0];
-          var k_codePostal = k_formAdresse.split(',')[3];
-          var k_adresseFinal = k_dealer +' ' + k_adresse + ' -' + k_codePostal + ' ' + k_city;
-          addressInput.value = k_adresseFinal;
-          console.log('k_adresseFinal', k_adresseFinal);
-          var dealerInfo = "<li class=\"kam-dealers-container__option\" data-dealerId=\"".concat(option.dealerId, "\">").concat(k_adresseFinal, "</li>");
+          var dealerInfo = "<li class=\"kam-dealers-container__option\" data-dealerId=\"".concat(option.dealerId, "\">").concat(option.address, "</li>");
 
           if (acc.length < 6) {
             dealersContainer.insertAdjacentHTML('beforeend', dealerInfo);
@@ -436,12 +433,11 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         options.forEach(function (dealer) {
           dealer.addEventListener(Kameleoon.Internals.runtime.mouseDownEvent, function () {
             if (!Kameleoon.Internals.runtime.touchMoveEvent) {
-                addressInput.value = dealer.textContent;
-              	addressInput.value = dealer.textContent;
-                window.sessionStorage.setItem('kam-chosenDealer', dealer.textContent);
-                window.sessionStorage.setItem('kam-chosenDealerId', dealer.getAttribute('data-dealerId'));
-                utils.removeElement(dealersContainer);
-                hideErrorMessage();
+              addressInput.value = dealer.textContent;
+              window.sessionStorage.setItem('kam-chosenDealer', dealer.textContent);
+              window.sessionStorage.setItem('kam-chosenDealerId', dealer.getAttribute('data-dealerId'));
+              utils.removeElement(dealersContainer);
+              hideErrorMessage();
             }
           });
         });
@@ -477,7 +473,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         xhr.addEventListener("readystatechange", function () {
           if (this.readyState === 4 && this.responseText) {
             var response = JSON.parse(this.responseText);
-            console.log('autocompleteAddress response ====>', response);
 
             if (response.data) {
               var dealers = response.data;
@@ -687,7 +682,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         });
       },
       renderAfterSendPage: function renderAfterSendPage(data) {
-        console.log('data ====>', data);
         var verstka =
         /*html*/
         "\n        <div class=\"kam-form-result kam-form-result_visibility_hidden\">\n             <div class=\"kam-form-result__content\">\n                <div class=\"kam-form-result__heading\">".concat(data.successPage.title, "</div>\n                <div class=\"kam-form-result__first-paragraph\">").concat(data.successPage.firstParagraph, "</div>\n                <div class=\"kam-form-result__second-paragraph\">").concat(data.successPage.secondParagraph, "</div>\n                <div class=\"kam-form-result__third-paragraph\">").concat(data.successPage.thirdParagraph, "</div>\n             </div>\n        </div>");
