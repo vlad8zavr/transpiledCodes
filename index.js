@@ -16,35 +16,20 @@
     return obj;
   }
 
-  function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-
-    if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-      keys.push.apply(keys, symbols);
-    }
-
-    return keys;
-  }
-
-  function _objectSpread2(target) {
+  function _objectSpread(target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i] != null ? arguments[i] : {};
+      var ownKeys = Object.keys(source);
 
-      if (i % 2) {
-        ownKeys(source, true).forEach(function (key) {
-          _defineProperty(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys(source).forEach(function (key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
+      if (typeof Object.getOwnPropertySymbols === 'function') {
+        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+        }));
       }
+
+      ownKeys.forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
     }
 
     return target;
@@ -91,7 +76,7 @@
     borderHeart: "data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDUxLjk5NyA1MS45OTciIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxLjk5NyA1MS45OTc7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiPgo8Zz4KCTxwYXRoIGQ9Ik01MS45MTEsMTYuMjQyQzUxLjE1Miw3Ljg4OCw0NS4yMzksMS44MjcsMzcuODM5LDEuODI3Yy00LjkzLDAtOS40NDQsMi42NTMtMTEuOTg0LDYuOTA1ICAgYy0yLjUxNy00LjMwNy02Ljg0Ni02LjkwNi0xMS42OTctNi45MDZjLTcuMzk5LDAtMTMuMzEzLDYuMDYxLTE0LjA3MSwxNC40MTVjLTAuMDYsMC4zNjktMC4zMDYsMi4zMTEsMC40NDIsNS40NzggICBjMS4wNzgsNC41NjgsMy41NjgsOC43MjMsNy4xOTksMTIuMDEzbDE4LjExNSwxNi40MzlsMTguNDI2LTE2LjQzOGMzLjYzMS0zLjI5MSw2LjEyMS03LjQ0NSw3LjE5OS0xMi4wMTQgICBDNTIuMjE2LDE4LjU1Myw1MS45NywxNi42MTEsNTEuOTExLDE2LjI0MnogTTQ5LjUyMSwyMS4yNjFjLTAuOTg0LDQuMTcyLTMuMjY1LDcuOTczLTYuNTksMTAuOTg1TDI1Ljg1NSw0Ny40ODFMOS4wNzIsMzIuMjUgICBjLTMuMzMxLTMuMDE4LTUuNjExLTYuODE4LTYuNTk2LTEwLjk5Yy0wLjcwOC0yLjk5Ny0wLjQxNy00LjY5LTAuNDE2LTQuNzAxbDAuMDE1LTAuMTAxQzIuNzI1LDkuMTM5LDcuODA2LDMuODI2LDE0LjE1OCwzLjgyNiAgIGM0LjY4NywwLDguODEzLDIuODgsMTAuNzcxLDcuNTE1bDAuOTIxLDIuMTgzbDAuOTIxLTIuMTgzYzEuOTI3LTQuNTY0LDYuMjcxLTcuNTE0LDExLjA2OS03LjUxNCAgIGM2LjM1MSwwLDExLjQzMyw1LjMxMywxMi4wOTYsMTIuNzI3QzQ5LjkzOCwxNi41Nyw1MC4yMjksMTguMjY0LDQ5LjUyMSwyMS4yNjF6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==",
     like: "data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4IiB2aWV3Qm94PSIwIDAgNDU2LjgxNCA0NTYuODE0IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA0NTYuODE0IDQ1Ni44MTQ7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8Zz4KCQk8cGF0aCBkPSJNNDQxLjExLDI1Mi42NzdjMTAuNDY4LTExLjk5LDE1LjcwNC0yNi4xNjksMTUuNzA0LTQyLjU0YzAtMTQuODQ2LTUuNDMyLTI3LjY5Mi0xNi4yNTktMzguNTQ3ICAgIGMtMTAuODQ5LTEwLjg1NC0yMy42OTUtMTYuMjc4LTM4LjU0MS0xNi4yNzhoLTc5LjA4MmMwLjc2LTIuNjY0LDEuNTIyLTQuOTQ4LDIuMjgyLTYuODUxYzAuNzUzLTEuOTAzLDEuODExLTMuOTk5LDMuMTM4LTYuMjgzICAgIGMxLjMyOC0yLjI4NSwyLjI4My0zLjk5OSwyLjg1Mi01LjEzOWMzLjQyNS02LjQ2OCw2LjA0Ny0xMS44MDEsNy44NTctMTUuOTg1YzEuODA3LTQuMTkyLDMuNjA2LTkuOSw1LjQyLTE3LjEzMyAgICBjMS44MTEtNy4yMjksMi43MTEtMTQuNDY1LDIuNzExLTIxLjY5OGMwLTQuNTY2LTAuMDU1LTguMjgxLTAuMTQ1LTExLjEzNGMtMC4wODktMi44NTUtMC41NzQtNy4xMzktMS40MjMtMTIuODUgICAgYy0wLjg2Mi01LjcwOC0yLjAwNi0xMC40NjctMy40My0xNC4yNzJjLTEuNDMtMy44MDYtMy43MTYtOC4wOTItNi44NTEtMTIuODQ3Yy0zLjE0Mi00Ljc2NC02Ljk0Ny04LjYxMy0xMS40MjQtMTEuNTY1ICAgIGMtNC40NzYtMi45NS0xMC4xODQtNS40MjQtMTcuMTMxLTcuNDIxYy02Ljk1NC0xLjk5OS0xNC44MDEtMi45OTgtMjMuNTYyLTIuOTk4Yy00Ljk0OCwwLTkuMjI3LDEuODA5LTEyLjg0Nyw1LjQyNiAgICBjLTMuODA2LDMuODA2LTcuMDQ3LDguNTY0LTkuNzA5LDE0LjI3MmMtMi42NjYsNS43MTEtNC41MjMsMTAuNjYtNS41NzEsMTQuODQ5Yy0xLjA0Nyw0LjE4Ny0yLjIzOCw5Ljk5NC0zLjU2NSwxNy40MTUgICAgYy0xLjcxOSw3Ljk5OC0yLjk5OCwxMy43NTItMy44NiwxNy4yNzNjLTAuODU1LDMuNTIxLTIuNTI1LDguMTM2LTQuOTk3LDEzLjg0NWMtMi40NzcsNS43MTMtNS40MjQsMTAuMjc4LTguODUxLDEzLjcwNiAgICBjLTYuMjgsNi4yOC0xNS44OTEsMTcuNzAxLTI4LjgzNywzNC4yNTljLTkuMzI5LDEyLjE4LTE4Ljk0LDIzLjY5NS0yOC44MzcsMzQuNTQ1Yy05Ljg5OSwxMC44NTItMTcuMTMxLDE2LjQ2Ni0yMS42OTgsMTYuODQ3ICAgIGMtNC43NTUsMC4zOC04Ljg0OCwyLjMzMS0xMi4yNzUsNS44NTRjLTMuNDI3LDMuNTIxLTUuMTQsNy42NjItNS4xNCwxMi40MTl2MTgzLjAxYzAsNC45NDksMS44MDcsOS4xODIsNS40MjQsMTIuNzAzICAgIGMzLjYxNSwzLjUyNSw3Ljg5OCw1LjM4LDEyLjg0Nyw1LjU3MWM2LjY2MSwwLjE5MSwyMS42OTgsNC4zNzQsNDUuMTExLDEyLjU2NmMxNC42NTQsNC45NDEsMjYuMTIsOC43MDYsMzQuNCwxMS4yNzIgICAgYzguMjc4LDIuNTY2LDE5Ljg0OSw1LjMyOCwzNC42ODQsOC4yODJjMTQuODQ5LDIuOTQ5LDI4LjU1MSw0LjQyOCw0MS4xMSw0LjQyOGg0Ljg1NWgyMS43aDEwLjI3NiAgICBjMjUuMzIxLTAuMzgsNDQuMDYxLTcuODA2LDU2LjI0Ny0yMi4yNjhjMTEuMDM2LTEzLjEzNSwxNS42OTctMzAuMzYxLDEzLjk5LTUxLjY3OWM3LjQyMi03LjA0MiwxMi41NjUtMTUuOTg0LDE1LjQxNi0yNi44MzYgICAgYzMuMjMxLTExLjYwNCwzLjIzMS0yMi43NCwwLTMzLjM5N2M4Ljc1NC0xMS42MTEsMTIuODQ3LTI0LjY0OSwxMi4yNzItMzkuMTE1QzQ0NS4zOTUsMjY4LjI4Niw0NDMuOTcxLDI2MS4wNTUsNDQxLjExLDI1Mi42Nzd6IiBmaWxsPSIjMDAwMDAwIi8+CgkJPHBhdGggZD0iTTEwMC41LDE5MS44NjRIMTguMjc2Yy00Ljk1MiwwLTkuMjM1LDEuODA5LTEyLjg1MSw1LjQyNkMxLjgwOSwyMDAuOTA1LDAsMjA1LjE4OCwwLDIxMC4xMzd2MTgyLjczMiAgICBjMCw0Ljk0MiwxLjgwOSw5LjIyNyw1LjQyNiwxMi44NDdjMy42MTksMy42MTEsNy45MDIsNS40MjEsMTIuODUxLDUuNDIxSDEwMC41YzQuOTQ4LDAsOS4yMjktMS44MSwxMi44NDctNS40MjEgICAgYzMuNjE2LTMuNjIsNS40MjQtNy45MDQsNS40MjQtMTIuODQ3VjIxMC4xMzdjMC00Ljk0OS0xLjgwOS05LjIzMS01LjQyNC0xMi44NDdDMTA5LjczLDE5My42NzIsMTA1LjQ0OSwxOTEuODY0LDEwMC41LDE5MS44NjR6ICAgICBNNjcuNjY1LDM2OS4zMDhjLTMuNjE2LDMuNTIxLTcuODk4LDUuMjgxLTEyLjg0Nyw1LjI4MWMtNS4xNCwwLTkuNDcxLTEuNzYtMTIuOTktNS4yODFjLTMuNTIxLTMuNTIxLTUuMjgxLTcuODUtNS4yODEtMTIuOTkgICAgYzAtNC45NDgsMS43NTktOS4yMzIsNS4yODEtMTIuODQ3YzMuNTItMy42MTcsNy44NS01LjQyOCwxMi45OS01LjQyOGM0Ljk0OSwwLDkuMjMxLDEuODExLDEyLjg0Nyw1LjQyOCAgICBjMy42MTcsMy42MTQsNS40MjYsNy44OTgsNS40MjYsMTIuODQ3QzczLjA5MSwzNjEuNDU4LDcxLjI4NiwzNjUuNzg2LDY3LjY2NSwzNjkuMzA4eiIgZmlsbD0iIzAwMDAwMCIvPgoJPC9nPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo="
   };
-  Kameleoon.API.Core.runWhenElementPresent('.main-product-container', function (e) {
+  Kameleoon.API.runWhenElementPresent('.main-product-container', function (e) {
     var productInfo = e[0];
     /**
     * Function return first DOMelement by selector
@@ -177,7 +162,7 @@
             productSizeOption = productSizeSplit[1],
             productSizeValue = productSizeInputs[_i2].value;
 
-        objProductSizes[productSizeId] = _objectSpread2({}, objProductSizes[productSizeId], {}, _defineProperty({}, productSizeOption, productSizeValue));
+        objProductSizes[productSizeId] = _objectSpread({}, objProductSizes[productSizeId], _defineProperty({}, productSizeOption, productSizeValue));
       }
 
       var productArticle = getElem('.ref-product') ? getElem('.ref-product').textContent.trim() : null,
@@ -205,9 +190,7 @@
           productPdtPicto = getElem('.pdtPicto'),
           productSliderImages = getAllElem('li.swiper-slide > img'),
           productImgBox = getElem('#viewerImage img'),
-          productOnlyStore2 = getElem('.in-store-only-container'),
-          productOnlyStore = getElem('#tab-online > span.unavailability');
-
+          productOnlyStore = getElem('.in-store-only-container');
       return {
         arrCategoriesPath: arrCategoriesPath,
         productArticle: productArticle,
@@ -237,12 +220,9 @@
         productPdtPicto: productPdtPicto,
         productSliderImages: productSliderImages,
         productImgBox: productImgBox,
-        productOnlyStore: productOnlyStore,
-        productOnlyStore2: productOnlyStore2
+        productOnlyStore: productOnlyStore
       };
     };
-    /********* */
-
     /**
     * Create header element
     *
@@ -254,7 +234,7 @@
     var createHeaderElement = function createHeaderElement(data) {
       var element = document.createElement('div');
       element.id = 'kam_header-info';
-      element.innerHTML = "\n            <div class=\"kam_header-info_wrapper\">\n              <div class=\"kam_header-info_path\">\n                <!-- insert path element -->\n              </div>\n              <!-- insert slider element -->\n              <div class=\"kam_header-info_general-info\">\n                <div class=\"kam_header-info_brand\">".concat(data.productBrandImg, "</div>\n                <div class=\"kam_header-info_article\">").concat(data.productArticle, "</div>\n                <div class=\"kam_header-info_product-name\">").concat(data.productName, "</div>\n                <div class=\"kam_header-info_rating-wishlist\">\n                  <div class=\"kam_header-info_rating\">\n                    <!-- insert element -->\n                  </div>\n                  <div class=\"kam_header-info_wishlist\" title='\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0432 \u0441\u043F\u0438\u0441\u043E\u043A \u0436\u0435\u043B\u0430\u043D\u0438\u0439'>\n                    <!-- insert element -->\n                  </div>\n                </div>\n                <div class=\"kam_header-info_price-promo\">\n                  <!-- insert element -->\n                </div>\n                <div class=\"kam_header-info_color-wrap\">\n                  <!-- insert element -->\n                </div>\n                <div class=\"kam_header-info_size\">\n                  <div class=\"kam_header-info_size-title-prompt\">\n                    <div class=\"kam_header-info_size-title\">\u0420\u0430\u0437\u043C\u0435\u0440:</div>\n                    <div class=\"kam_header-info_size-how-change-size\"><!-- insert element --></div>\n                  </div>\n                  <div class=\"kam_header-info_size-wrapper\">\n                    <!-- <div class=\"\"><div class=\"kam_header-info_size-element_fix-centr\">\n                    size 1 2 3</div>\n                    </div> -->\n                  </div>\n                  <div class=\"kam_header-info_size-sizelution\">\n                    <!-- insert element -->\n                  </div>\n                </div>\n                <div class=\"kam_header-info_message\">\n                  ").concat(gv.missingProductMessage, "\n                </div>\n                <div class=\"kam_header-info_add-to-cart-reserve\">\n                  <div class=\"kam_header-info_add-to-cart\">\n                    <div class=\"kam_header-info_add-error\">\n                      \u0421\u043D\u0430\u0447\u0430\u043B\u0430 \u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0440\u0430\u0437\u043C\u0435\u0440\n                    </div>\n                    <!-- insert element -->\n                  </div>\n                  <div class=\"kam_header-info_reserve\">\n                    <!-- insert element -->\n                  </div>\n                </div>\n                <div class=\"kam_header-info_notice\">* \u0426\u0435\u043D\u0430 \u0438 \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0432 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442-\u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0435 \u043C\u043E\u0433\u0443\u0442 \u043E\u0442\u043B\u0438\u0447\u0430\u0442\u044C\u0441\u044F \u043E\u0442 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u043E\u0432</div>\n                <div class=\"kam_header-info_description\">").concat(data.productDesc).concat(data.productDescCatch, "</div>\n                <a href=\"#anchor_ProductTechnicalInfos\" class=\"kam_header-info_more-info\">\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u0430\u044F \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F</a>\n                <a href=\"#anchor_ProductComposition\" class=\"kam_header-info_advice\">\u0421\u043E\u0432\u0435\u0442\u044B/\u0421\u043E\u0441\u0442\u0430\u0432</a>\n              </div>\n            </div>\n            ");
+      element.innerHTML = "\n            <div class=\"kam_header-info_wrapper\">\n              <div class=\"kam_header-info_path\">\n                <!-- insert path element -->\n              </div>\n              <!-- insert slider element -->\n              <div class=\"kam_header-info_general-info\">\n                <div class=\"kam_header-info_brand\">".concat(data.productBrandImg, "</div>\n                <div class=\"kam_header-info_article\">").concat(data.productArticle, "</div>\n                <div class=\"kam_header-info_product-name\">").concat(data.productName, "</div>\n                <div class=\"kam_header-info_rating-wishlist\">\n                  <div class=\"kam_header-info_rating\">\n                    <!-- insert element -->\n                  </div>\n                  <div class=\"kam_header-info_wishlist\" title='\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0432 \u0441\u043F\u0438\u0441\u043E\u043A \u0436\u0435\u043B\u0430\u043D\u0438\u0439'>\n                    <!-- insert element -->\n                  </div>\n                </div>\n                <div class=\"kam_header-info_price-promo\">\n                  <!-- insert element -->\n                </div>\n                <div class=\"kam_header-info_color-wrap\">\n                  <!-- insert element -->\n                </div>\n                <div class=\"kam_header-info_size\">\n                  <div class=\"kam_header-info_size-title-prompt\">\n                    <div class=\"kam_header-info_size-title\">\u0420\u0430\u0437\u043C\u0435\u0440</div>\n                    <div class=\"kam_header-info_size-how-change-size\"><!-- insert element --></div>\n                  </div>\n                  <div class=\"kam_header-info_size-wrapper\">\n                    <!-- <div class=\"\"><div class=\"kam_header-info_size-element_fix-centr\">\n                    size 1 2 3</div>\n                    </div> -->\n                  </div>\n                  <div class=\"kam_header-info_size-sizelution\">\n                    <!-- insert element -->\n                  </div>\n                </div>\n                <div class=\"kam_header-info_add-to-cart-reserve\">\n                  <div class=\"kam_header-info_add-to-cart\">\n                    <div class=\"kam_header-info_add-error\">\n                      \u0421\u043D\u0430\u0447\u0430\u043B\u0430 \u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0440\u0430\u0437\u043C\u0435\u0440\n                    </div>\n                    <!-- insert element -->\n                  </div>\n                  <div class=\"kam_header-info_reserve\">\n                    <!-- insert element -->\n                  </div>\n                </div>\n                <div class=\"kam_header-info_notice\">* \u0426\u0435\u043D\u0430 \u0438 \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0432 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442-\u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0435 \u043C\u043E\u0433\u0443\u0442 \u043E\u0442\u043B\u0438\u0447\u0430\u0442\u044C\u0441\u044F \u043E\u0442 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u043E\u0432</div>\n                <div class=\"kam_header-info_description\">").concat(data.productDesc).concat(data.productDescCatch, "</div>\n                <a href=\"#anchor_ProductTechnicalInfos\" class=\"kam_header-info_more-info\">\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u0430\u044F \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F</a>\n                <a href=\"#anchor_ProductComposition\" class=\"kam_header-info_advice\">\u0421\u043E\u0432\u0435\u0442\u044B/\u0421\u043E\u0441\u0442\u0430\u0432</a>\n              </div>\n            </div>\n            ");
       /**
       * function for simply insert element in DOM
       *
@@ -458,9 +438,9 @@
         var keysObj = Object.keys(sizeInfo);
 
         if (fix) {
-          selectSize(_objectSpread2({}, {
+          selectSize(_objectSpread({}, {
             id: keysObj[0]
-          }, {}, sizeInfo[keysObj[0]]));
+          }, sizeInfo[keysObj[0]]));
         }
 
         if (fix) return 0;
@@ -665,7 +645,7 @@
 
         var hourMsgElement;
         var stopInterval = 0;
-        Kameleoon.API.Core.runWhenConditionTrue(function () {
+        Kameleoon.API.runWhenConditionTrue(function () {
           if (!!storeInfo && openingHourMsg.innerHTML != '' && hoursInfo.innerHTML != '') {
             return true;
           } else {
@@ -760,28 +740,7 @@
 
       if (elementIsset.size) {
         insertElement('.kam_header-info_size-wrapper', createSizeElement(data.productDropDown, data.objProductSizes), 'afterEnd');
-        insertElement('.kam_header-info_size-how-change-size', data.tableWithSize); //-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-
-
-        Kameleoon.API.Core.runWhenElementPresent('.kam_header-info_size-how-change-size .link_size_guider', function (sizeGuider) {
-          if (document.querySelector('.link_size_guider')) {
-            document.querySelector('.link_size_guider').textContent = 'Какой размер мне подойдет?';
-          } // MUTATION OBSERVER
-
-
-          var mutationObserver = new MutationObserver(function () {
-            if (document.querySelector('.link_size_guider')) {
-              document.querySelector('.link_size_guider').textContent = 'Какой размер мне подойдет?';
-            }
-          });
-          mutationObserver.observe(document.body, {
-            attributes: true,
-            childList: true,
-            subtree: true,
-            characterData: true,
-            characterDataOldValue: true
-          }); // END OF MUTATION OBSERVER
-        }); //-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-
-
+        insertElement('.kam_header-info_size-how-change-size', data.tableWithSize);
         insertElement('.kam_header-info_size-sizelution', data.helpWidthSelectSize);
       } else {
         tooltip.addListener();
@@ -792,28 +751,30 @@
         if (Object.keys(data.objProductSizes)[0]) {
           createSizeElement(data.productDropDown, data.objProductSizes, null, true);
         }
-      } // productOnlyStore = getElem('#tab-online > span.hidden');
-
-
-      if(!data.productOnlyStore.classList.contains('hidden') || data.productOnlyStore2) {
-        element.querySelector('.kam_header-info_message').classList.add('kam_message_active');
-        element.querySelector('.kam_header-info_add-to-cart-reserve').classList.add('kam_header-info__reservation-only');
-      } else {
-        insertElement('.kam_header-info_add-to-cart', data.productAddToCart, 'beforeEnd');
-        addErrorMessage(data.productAddToCart.querySelector('#add_to_cart_button'));
       }
 
-      insertElement('.kam_header-info_reserve', data.productReservation); // replaceText(data.productReservation.querySelector('a'), 'Забронировать в магазине', 'Забронировать в магазине');
+      if (!data.productOnlyStore) {
+        var addToCartButton = data.productAddToCart.querySelector('#add_to_cart_button');
+        insertElement('.kam_header-info_add-to-cart', data.productAddToCart, 'beforeEnd');
+        addErrorMessage(addToCartButton);
+        addToCartButton.innerHTML = 'В корзину';
+        addToCartButton.title = 'В корзину';
+      } else {
+        element.querySelector('.kam_header-info_message').classList.add('kam_message_active');
+        element.querySelector('.kam_header-info_add-to-cart-reserve').classList.add('kam_header-info__reservation-only');
+      }
 
+      insertElement('.kam_header-info_reserve', data.productReservation);
+      replaceText(data.productReservation.querySelector('a'), 'Забронировать в магазине', 'ЗАБРАТЬ ЧЕРЕЗ ЧАС');
       addErrorMessage(data.productReservation);
 
       if (storeName.textContent.trim() !== '') {
-        insertElement('.kam_header-info_reserve', replaceText(data.productReservationButton, 'Забронировать в магазине', 'Забронировать в магазине'));
+        insertElement('.kam_header-info_reserve', replaceText(data.productReservationButton, 'Забронировать в магазине', 'ЗАБРАТЬ ЧЕРЕЗ ЧАС'));
         insertElement('.kam_header-info_add-to-cart-reserve', tooltip.element, 'afterEnd');
       } else {
-        Kameleoon.API.Core.runWhenElementPresent('#store-link-content .icon-text', function (e) {
+        Kameleoon.API.runWhenElementPresent('#store-link-content .icon-text', function (e) {
           if (e[0].textContent.trim() !== 'Мой магазин') {
-            insertElement('.kam_header-info_reserve', replaceText(data.productReservationButton, 'Забронировать в магазине', 'Забронировать в магазине'));
+            insertElement('.kam_header-info_reserve', replaceText(data.productReservationButton, 'Забронировать в магазине', 'ЗАБРАТЬ ЧЕРЕЗ ЧАС'));
             insertElement('.kam_header-info_add-to-cart-reserve', tooltip.element, 'afterEnd');
           } else {
             data.productReservationButton.style.display = 'none';
@@ -1000,7 +961,6 @@
           */
 
           var toSlideElement = function toSlideElement(num, button, missing) {
-
             var buttons = _toConsumableArray(controllerElement.querySelectorAll('.kam_controller-element_button'));
 
             var unActiveButtons = function unActiveButtons(buttons) {
@@ -1031,10 +991,9 @@
 
           (function () {
             var _loop = function _loop(i, _y, len) {
-
               var insideText = slides[i].textContent.trim().replace(/[\s\\().\[\]{}'"`]/g, '').slice(0, 40);
 
-              if ('СОСТАВ/CОВЕТЫРекомендациипохранениюОграниченияпоиспользованию:СОСТАВ/CОВЕТЫОграниченияпоиспользованию: ТЕХНИЧЕСКАЯИНФОРМАЦИЯ ПРЕИМУЩЕСТВАСОСТАВ/CОВЕТЫСоставРекомендациипоуходу:'.match(insideText)) {
+              if ('СОСТАВ/CОВЕТЫРекомендациипохранениюОграниченияпоиспользованию:СОСТАВ/CОВЕТЫОграниченияпоиспользованию: ТЕХНИЧЕСКАЯИНФОРМАЦИЯ ПРЕИМУЩЕСТВА'.match(insideText)) {
                 _y && _y++;
                 y = _y;
                 return "continue";
@@ -1067,8 +1026,8 @@
             };
 
             for (var i = 0, y = 0, len = slides.length; i < len; i++) {
-              
               var _ret2 = _loop(i, y);
+
               if (_ret2 === "continue") continue;
             }
           })();
@@ -1111,7 +1070,7 @@
     var renderHeader = function renderHeader(header) {
       productInfo.insertAdjacentElement('afterBegin', header);
       var counterToStop = 0;
-      Kameleoon.API.Core.runWhenConditionTrue(function () {
+      Kameleoon.API.runWhenConditionTrue(function () {
         if (counterToStop != 10) {
           var complement = productInfo.querySelector('.free-html-compario.free-html-compario-legal-zone'),
               selector = document.querySelector('#ProductPageByFloor_1_secondaryProductContainer_0_ComponentComplementaryZone_0_ComponentComplementaryZone_2_t2s-like_t2s-like');
@@ -1144,7 +1103,7 @@
     var renderSecondElement = function renderSecondElement(second) {
       document.querySelector('.secondary-product-container').insertAdjacentElement('beforeBegin', second);
     };
-    Kameleoon.API.Core.runWhenConditionTrue(function () {
+    Kameleoon.API.runWhenConditionTrue(function () {
       var refLoad = getElem('.ref-product'),
           brandLoad = getElem('.brand > img'),
           brandWrap = getElem('.brand'),
@@ -1166,9 +1125,7 @@
           videoButton = getElem('#showVideo'),
           containerSlider = getElem('#main-product-thumbnails-container .swiper-container'),
           price = getElem('#real_price'),
-          productOnlyStore2 = getElem('.in-store-only-container'),
-          productOnlyStore = getElem('#tab-online > span.unavailability');
-
+          productOnlyStore = getElem('.in-store-only-container');
 
       if (!!refLoad && (!!brandLoad || !!brandWrap) && !!wishLoad && !!nameLoad && !!ratingLoad && !!promoLoad && !!priceLoad && !!price && !!prodLoad && !!containerSlider && !!tabLoad && (!!addToCartLoad || !!productOnlyStore) && (!!guideLoad && !!dropDownLoad || !guideLoad && !dropDownLoad) && (!!concuPourLoad || !!catchLoad) && !!swiperLoad && !!storeInfoLoad && (videoButton.innerHTML.trim() !== '' || videoButton && window.getComputedStyle(videoButton).getPropertyValue('display') === 'none') && typeof tc_vars !== 'undefined') {
         if (!!dropDownLoad) {
@@ -1181,10 +1138,10 @@
       var data = getDataProduct();
       renderHeader(createHeaderElement(data));
     });
-    Kameleoon.API.Core.runWhenElementPresent('.floor-complementary', function (e) {
+    Kameleoon.API.runWhenElementPresent('.floor-complementary', function (e) {
       var containerElements = e[0];
       var complementary, technical, composition, liability;
-      Kameleoon.API.Core.runWhenConditionTrue(function () {
+      Kameleoon.API.runWhenConditionTrue(function () {
         complementary = getElem('.block-complementary-container.container-even', containerElements);
         technical = getElem('.technical-infos-container', containerElements);
         composition = getElem('.product-composition-component', containerElements);
@@ -1204,7 +1161,7 @@
       });
     });
   });
-  Kameleoon.API.Core.runWhenElementPresent('.main-reviews-container', function (e) {
+  Kameleoon.API.runWhenElementPresent('.main-reviews-container', function (e) {
     var reviewsWrap = e[0];
 
     var arrReviews = _toConsumableArray(reviewsWrap.querySelectorAll('.review-container'));
@@ -1215,7 +1172,7 @@
     };
 
     var text = function text(object) {
-      if (object) return object.textContent.trim();else return '';
+      return object.textContent.trim();
     };
 
     var getDataForReviews = function getDataForReviews() {
@@ -1251,7 +1208,7 @@
           buttonNo: getElem('.r-usefull-review > p:nth-child(2) > span > button:nth-child(2)', oldReview),
           response: response(getElem('.review-reponse', oldReview)),
           abuse: getElem('.abuse', oldReview),
-          stars: countOfStars(_toConsumableArray(oldReview.querySelectorAll('p.r-title > .r-title-resume-rs > span')))
+          stars: countOfStars(_toConsumableArray(oldReview.querySelectorAll('p.r-title > span')))
         };
         arrNewReviews.push(newReview);
       }
@@ -1569,7 +1526,7 @@
 
       var listOfReviews = reviewsWrap.querySelector('.reviews-list-container');
       listOfReviews.innerHTML = '';
-      Kameleoon.API.Core.runWhenElementPresent('#footer', function (footer) {
+      Kameleoon.API.runWhenElementPresent('#footer', function (footer) {
         for (var i = elements.length - 1; i >= 0; i--) {
           footer[0].insertAdjacentElement('beforeBegin', elements[i]);
         }
@@ -1578,5 +1535,4 @@
 
     insertReviewElement(createReviewsElement(getDataForReviews()), createSortElement(), createReviewsInfoElement(getDataForTotalInfo()));
   });
-
 }());
