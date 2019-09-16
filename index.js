@@ -205,8 +205,9 @@
           productPdtPicto = getElem('.pdtPicto'),
           productSliderImages = getAllElem('li.swiper-slide > img'),
           productImgBox = getElem('#viewerImage img'),
-          // productOnlyStore = getElem('.in-store-only-container');
-      productOnlyStore = getElem('#tab-online > span.hidden');
+          productOnlyStore2 = getElem('.in-store-only-container'),
+          productOnlyStore = getElem('#tab-online > span.unavailability');
+
       return {
         arrCategoriesPath: arrCategoriesPath,
         productArticle: productArticle,
@@ -236,7 +237,8 @@
         productPdtPicto: productPdtPicto,
         productSliderImages: productSliderImages,
         productImgBox: productImgBox,
-        productOnlyStore: productOnlyStore
+        productOnlyStore: productOnlyStore,
+        productOnlyStore2: productOnlyStore2
       };
     };
     /********* */
@@ -793,16 +795,12 @@
       } // productOnlyStore = getElem('#tab-online > span.hidden');
 
 
-      if (data.productOnlyStore) {
-        //if(!data.productOnlyStore) {
-        var addToCartButton = data.productAddToCart.querySelector('#add_to_cart_button');
-        insertElement('.kam_header-info_add-to-cart', data.productAddToCart, 'beforeEnd');
-        addErrorMessage(addToCartButton);
-        addToCartButton.innerHTML = 'В корзину';
-        addToCartButton.title = 'В корзину';
-      } else {
+      if(!data.productOnlyStore.classList.contains('hidden') || data.productOnlyStore2) {
         element.querySelector('.kam_header-info_message').classList.add('kam_message_active');
         element.querySelector('.kam_header-info_add-to-cart-reserve').classList.add('kam_header-info__reservation-only');
+      } else {
+        insertElement('.kam_header-info_add-to-cart', data.productAddToCart, 'beforeEnd');
+        addErrorMessage(data.productAddToCart.querySelector('#add_to_cart_button'));
       }
 
       insertElement('.kam_header-info_reserve', data.productReservation); // replaceText(data.productReservation.querySelector('a'), 'Забронировать в магазине', 'Забронировать в магазине');
@@ -1168,8 +1166,9 @@
           videoButton = getElem('#showVideo'),
           containerSlider = getElem('#main-product-thumbnails-container .swiper-container'),
           price = getElem('#real_price'),
-          //productOnlyStore = getElem('.in-store-only-container');
-      productOnlyStore = getElem('#tab-online > span.hidden');
+          productOnlyStore2 = getElem('.in-store-only-container'),
+          productOnlyStore = getElem('#tab-online > span.unavailability');
+
 
       if (!!refLoad && (!!brandLoad || !!brandWrap) && !!wishLoad && !!nameLoad && !!ratingLoad && !!promoLoad && !!priceLoad && !!price && !!prodLoad && !!containerSlider && !!tabLoad && (!!addToCartLoad || !!productOnlyStore) && (!!guideLoad && !!dropDownLoad || !guideLoad && !dropDownLoad) && (!!concuPourLoad || !!catchLoad) && !!swiperLoad && !!storeInfoLoad && (videoButton.innerHTML.trim() !== '' || videoButton && window.getComputedStyle(videoButton).getPropertyValue('display') === 'none') && typeof tc_vars !== 'undefined') {
         if (!!dropDownLoad) {
